@@ -127,6 +127,8 @@ const FORM_ENTRY = "entry.2101347444";
 // Zum Testen: Adresse mit ?test aufrufen (zeigt die Abstimmung, sendet aber nichts).
 const OPEN_AT = Date.UTC(2026, 10, 28, 18, 0), CLOSE_AT = Date.UTC(2026, 10, 29, 3, 0);
 const TEST = /[?&]test\b/.test(location.search);
+// Probelauf: Adresse mit ?probe zeigt die Abstimmung und zählt die Stimmen wirklich.
+const PROBE = /[?&]probe\b/.test(location.search);
 
 /* ===== Programm =====
    lyrics: Liedtext als Text. Leerzeile trennt Strophen. Eine Strophe, die mit "[Refrain]" beginnt, wird hervorgehoben. */
@@ -172,7 +174,7 @@ function renderList(){
 /* ===== Abstimmung ===== */
 let voteState = "closed", picked = null, lastVote = null;
 function voteOpen(){
-  if (TEST) return true;
+  if (TEST || PROBE) return true;
   const t = Date.now();
   return t >= OPEN_AT && t < CLOSE_AT;
 }
@@ -185,7 +187,7 @@ function renderVote(){
     return;
   }
   if (voteState === "closed") voteState = "idle";
-  $("#vote-txt").textContent = TEST ? "Testmodus: Hier wird nichts gezählt." : "Die Abstimmung läuft! Ihr dürft so oft abstimmen, wie ihr wollt.";
+  $("#vote-txt").textContent = TEST ? "Testmodus: Hier wird nichts gezählt." : PROBE ? "Probelauf: Diese Stimmen werden gezählt." : "Die Abstimmung läuft! Ihr dürft so oft abstimmen, wie ihr wollt.";
   const thanks = lastVote ? `<div class="ok" role="status">Danke! Deine Stimme für <strong>${esc(lastVote)}</strong> ist gezählt. Ihr dürft gern noch einmal abstimmen.</div>` : "";
   if (voteState === "idle"){
     a.innerHTML = thanks + `<button class="btn" type="button" id="vote-start">${lastVote ? "Noch einmal abstimmen" : "Jetzt abstimmen"}</button>`;

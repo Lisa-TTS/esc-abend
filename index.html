@@ -123,8 +123,10 @@ button.btn{cursor:pointer;width:100%}
 // Stimmen gehen im Hintergrund an das Google-Formular (Antworten sieht nur Lisa).
 const FORM_POST = "https://docs.google.com/forms/d/e/1FAIpQLSfOG4jx-5S2DLh0mKJ2SZfkZ-ROQInMP3nRPhpbo6pHzyZItw/formResponse";
 const FORM_ENTRY = "entry.2101347444";
-// Abstimmung auf der Seite ab 19 Uhr (bis 4 Uhr nachts). Zum Testen: Adresse mit ?offen aufrufen.
-const OPEN_HOUR = 19, CLOSE_HOUR = 4;
+// Abstimmung: 28.11.2026 ab 19:00 Uhr (deutsche Zeit, = 18:00 UTC) bis 29.11.2026 04:00 Uhr.
+// Zum Testen: Adresse mit ?test aufrufen (zeigt die Abstimmung, sendet aber nichts).
+const OPEN_AT = Date.UTC(2026, 10, 28, 18, 0), CLOSE_AT = Date.UTC(2026, 10, 29, 3, 0);
+const TEST = /[?&]test\b/.test(location.search);
 
 /* ===== Programm =====
    lyrics: Liedtext als Text. Leerzeile trennt Strophen. Eine Strophe, die mit "[Refrain]" beginnt, wird hervorgehoben. */
@@ -170,18 +172,20 @@ function renderList(){
 /* ===== Abstimmung ===== */
 let voteState = "closed", picked = null, lastVote = null;
 function voteOpen(){
-  if (/[?&]offen\b/.test(location.search)) return true;
-  const h = new Date().getHours();
-  return h >= OPEN_HOUR || h < CLOSE_HOUR;
+  if (TEST) return true;
+  const t = Date.now();
+  return t >= OPEN_AT && t < CLOSE_AT;
 }
 function renderVote(){
   const a = $("#vote-area");
   if (!voteOpen()){
-    a.innerHTML = `<button class="btn" type="button" disabled aria-disabled="true">Abstimmung ab 19 Uhr</button>`;
+    const over = Date.now() >= CLOSE_AT;
+    $("#vote-txt").textContent = over ? "Die Abstimmung ist beendet. Danke fürs Mitmachen!" : "Die Abstimmung öffnet am 28. November um 19 Uhr. Ihr dürft so oft abstimmen, wie ihr wollt.";
+    a.innerHTML = `<button class="btn" type="button" disabled aria-disabled="true">${over ? "Abstimmung beendet" : "Abstimmung ab 19 Uhr"}</button>`;
     return;
   }
   if (voteState === "closed") voteState = "idle";
-  $("#vote-txt").textContent = "Die Abstimmung läuft! Ihr dürft so oft abstimmen, wie ihr wollt.";
+  $("#vote-txt").textContent = TEST ? "Testmodus: Hier wird nichts gezählt." : "Die Abstimmung läuft! Ihr dürft so oft abstimmen, wie ihr wollt.";
   const thanks = lastVote ? `<div class="ok" role="status">Danke! Deine Stimme für <strong>${esc(lastVote)}</strong> ist gezählt. Ihr dürft gern noch einmal abstimmen.</div>` : "";
   if (voteState === "idle"){
     a.innerHTML = thanks + `<button class="btn" type="button" id="vote-start">${lastVote ? "Noch einmal abstimmen" : "Jetzt abstimmen"}</button>`;
@@ -206,7 +210,7 @@ async function sendVote(){
   voteState = "sending"; renderVote();
   const body = new URLSearchParams(); body.set(FORM_ENTRY, `${picked.nr}. ${picked.title}`);
   try{
-    await fetch(FORM_POST, {method:"POST", mode:"no-cors", body});
+    if (!TEST) await fetch(FORM_POST, {method:"POST", mode:"no-cors", body});
     lastVote = picked.title; picked = null; voteState = "idle"; renderVote();
     $("#vote-area").scrollIntoView({block:"nearest"});
   }catch(e){
@@ -214,7 +218,7 @@ async function sendVote(){
     const er = $("#vote-err"); er.hidden = false; er.textContent = "Senden hat nicht geklappt. Bitte Internetverbindung prüfen und noch einmal tippen.";
   }
 }
-setInterval(() => { if (voteState === "closed" && voteOpen()) renderVote(); }, 30000);
+setInterval(() => { if ((voteState === "closed") === voteOpen()) { if (!voteOpen()) voteState = "closed"; renderVote(); } }, 30000);
 
 function lyricsHtml(text){
   return text.trim().split(/\n\s*\n/).map(st => {

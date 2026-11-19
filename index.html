@@ -1,0 +1,223 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Blue Lights ESC-Abend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: eine schmale Smartphone-Spalte. Startansicht = Programmliste mit Abstimmungs-Karte,
+   Liedansicht = Mitsing-Text in großer Schrift mit Vor/Zurück. Bewusst ein dunkles "Bühnenlicht"-Thema. */
+:root{
+  --night:#0b1230;      /* Saal im Dunkeln */
+  --stage:#141e4a;      /* Flächen */
+  --line:#2a3670;
+  --ink:#eef1ff;        /* Text */
+  --muted:#a6afd8;
+  --gold:#f4c443;       /* Akzent: Scheinwerfer-Gold */
+  --blue:#5b8cff;
+  --f-display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --lyr:1.35rem;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{background:var(--night);overflow-x:clip}
+body{overflow-x:clip}
+body{background:var(--night);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night)}
+.wrap{max-width:640px;margin:0 auto}
+a{color:var(--gold)}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+
+/* Kopf */
+.hero{padding-block:28px 20px;position:relative}
+.hero::after{content:"";position:absolute;left:-40px;right:-40px;top:-60px;height:220px;z-index:-1;
+  background:radial-gradient(ellipse 60% 70% at 30% 0%,rgba(91,140,255,.35),transparent 70%),
+             radial-gradient(ellipse 40% 60% at 85% 10%,rgba(244,196,67,.18),transparent 70%)}
+.eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.7rem,7vw,2.4rem);line-height:1.08;margin:.3em 0 .35em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--gold)}
+.lead{color:var(--muted);margin:0;max-width:34em}
+
+/* Abstimmen */
+.vote{margin-block:8px 28px;padding:18px;border:1.5px solid var(--gold);border-radius:16px;background:linear-gradient(160deg,rgba(244,196,67,.12),transparent 60%),var(--stage);display:grid;gap:12px}
+.vote h2{font-family:var(--f-display);font-size:1.1rem;margin:0}
+.vote p{margin:0;color:var(--muted)}
+.btn{display:flex;align-items:center;justify-content:center;gap:.5em;min-height:52px;padding:12px 18px;border-radius:12px;
+  background:var(--gold);color:#1a1300;font-weight:700;font-size:1.05rem;text-decoration:none;border:0;font-family:inherit}
+.btn[aria-disabled="true"]{background:var(--line);color:var(--muted)}
+
+/* Programmliste */
+.sec-h{font-family:var(--f-display);font-size:.95rem;font-weight:500;letter-spacing:.04em;margin:0 0 10px;color:var(--muted)}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.row{display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.song{flex:1;min-width:0;display:grid;grid-template-columns:2.6rem 1fr;gap:12px;align-items:center;padding:12px 0;text-decoration:none;color:inherit}
+.lt{flex:none;display:flex;align-items:center;justify-content:center;min-width:56px;min-height:40px;padding:0 12px;border-radius:10px;background:var(--gold);color:#1a1300;font-weight:700;font-size:.9rem;text-decoration:none}
+.song:active{background:var(--stage)}
+.nr{font-family:var(--f-display);font-size:1.15rem;color:var(--gold);text-align:right;font-variant-numeric:tabular-nums}
+.meta{min-width:0}
+.t{font-weight:700;font-size:1.08rem;line-height:1.25;display:block}
+.s{display:block;color:var(--muted);font-size:.9rem;line-height:1.35}
+.chev{color:var(--muted);font-size:1.3rem}
+.pause{padding:14px 0 6px;color:var(--muted);font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;text-align:center}
+
+/* Liedansicht */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--night);display:flex;align-items:center;gap:8px;padding-block:10px;border-bottom:1px solid var(--line)}
+.bar .back{flex:1;min-width:0;text-decoration:none;color:var(--ink);font-weight:700;padding:8px 0}
+.ic{min-width:44px;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--stage);color:var(--ink);font:700 1rem var(--f-body)}
+.lyr-head{padding-block:22px 6px}
+.lyr-head .nr{text-align:left;font-size:.9rem}
+.lyr-head h2{font-family:var(--f-display);font-size:clamp(1.5rem,6.5vw,2.1rem);line-height:1.12;margin:.25em 0;text-wrap:balance}
+.lyr-head p{margin:0;color:var(--muted)}
+.who{display:inline-block;margin-top:10px;padding:4px 10px;border-radius:999px;background:var(--stage);border:1px solid var(--line);font-size:.88rem}
+.lyrics{font-size:var(--lyr);line-height:1.55;padding-block:18px 8px;display:grid;gap:1.1em}
+.lyrics p{margin:0;white-space:pre-line}
+.lyrics .ref{border-left:3px solid var(--gold);padding-left:.7em;font-style:italic}
+.lyrics .lab{display:block;font-style:normal;font-size:.7em;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.empty{margin-block:20px;padding:18px;border:1px dashed var(--line);border-radius:14px;color:var(--muted)}
+.empty strong{color:var(--ink)}
+.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
+.nav a{display:block;padding:12px;border-radius:12px;background:var(--stage);border:1px solid var(--line);color:var(--ink);text-decoration:none;min-width:0}
+.nav a small{display:block;color:var(--muted)}
+.nav a span{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav .nx{text-align:right}
+.foot{margin-top:36px;color:var(--muted);font-size:.85rem;text-align:center}
+@media (prefers-reduced-motion:no-preference){.view{animation:in .25s ease-out}@keyframes in{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}}
+</style>
+</head><body>
+
+<div class="wrap">
+  <main id="home" class="view">
+    <header class="hero">
+      <div class="eyebrow">Blue Lights · 70 Jahre Eurovision</div>
+      <h1>Unser <em>ESC</em>-Abend</h1>
+      <p class="lead">21 Titel aus sieben Jahrzehnten. Mit „Text“ öffnet ihr den Liedtext in der Originalsprache. Ab 19 Uhr wählt ihr euren Lieblingstitel.</p>
+    </header>
+
+    <section class="vote" aria-labelledby="vote-h">
+      <h2 id="vote-h">Wählt den besten Titel</h2>
+      <p id="vote-txt">Die Abstimmung öffnet um 19 Uhr.</p>
+      <a id="vote-btn" class="btn" href="#" aria-disabled="true">Abstimmung noch geschlossen</a>
+    </section>
+
+    <h2 class="sec-h">Das Programm</h2>
+    <ol class="list" id="list"></ol>
+    <p class="foot">Viel Spaß beim Mitsingen!</p>
+  </main>
+
+  <main id="song" class="view" hidden></main>
+</div>
+
+<script>
+/* ===== Einstellungen ===== */
+// Link zum Abstimmungsformular. Leer = Abstimmung noch geschlossen.
+const VOTE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfOG4jx-5S2DLh0mKJ2SZfkZ-ROQInMP3nRPhpbo6pHzyZItw/viewform";
+
+/* ===== Programm =====
+   lyrics: Liedtext als Text. Leerzeile trennt Strophen. Eine Strophe, die mit "[Refrain]" beginnt, wird hervorgehoben. */
+const SONGS = [
+ {nr:1, title:"Ding-a-dong", year:1975, land:"Niederlande", orig:"Teach-In", who:"Blue Lights & QuerBeats"},
+ {nr:2, title:"Puppet on a String", year:1967, land:"Vereinigtes Königreich", orig:"Sandie Shaw", who:"Blue Lights & QuerBeats"},
+ {nr:3, title:"Boom Bang-a-Bang", year:1969, land:"Vereinigtes Königreich", orig:"Lulu", who:"Blue Lights & QuerBeats"},
+ {nr:4, title:"Non ho l’età", year:1964, land:"Italien", orig:"Gigliola Cinquetti", who:"Kids & Teens"},
+ {nr:5, title:"All Kinds of Everything", year:1970, land:"Irland", orig:"Dana", who:"Kids & Teens"},
+ {nr:6, title:"Arcade", year:2019, land:"Niederlande", orig:"Duncan Laurence", who:"Kids & Teens"},
+ {nr:7, title:"Making Your Mind Up", year:1981, land:"Vereinigtes Königreich", orig:"Bucks Fizz", who:"Blue Lights"},
+ {nr:8, title:"Refrain", year:1956, land:"Schweiz", orig:"Lys Assia", who:"Blue Lights"},
+ {nr:9, title:"Ein bißchen Frieden", year:1982, land:"Deutschland", orig:"Nicole", who:"Zoey"},
+ {nr:10, title:"Waterloo", year:1974, land:"Schweden", orig:"ABBA", who:"Blue Lights", pauseAfter:true},
+ {nr:11, title:"La det swinge", year:1985, land:"Norwegen", orig:"Bobbysocks!", who:"Blue Lights"},
+ {nr:12, title:"Take Me to Your Heaven", year:1999, land:"Schweden", orig:"Charlotte Nilsson", who:"Blue Lights, evtl. mit QuerBeats"},
+ {nr:13, title:"Fly on the Wings of Love", year:2000, land:"Dänemark", orig:"Olsen Brothers", who:"Heinz & Klaus"},
+ {nr:14, title:"Amar pelos dois", year:2017, land:"Portugal", orig:"Salvador Sobral", who:"Lisa"},
+ {nr:15, title:"Rise Like a Phoenix", year:2014, land:"Österreich", orig:"Conchita Wurst", who:"Tatjana"},
+ {nr:16, title:"Fairytale", year:2009, land:"Norwegen", orig:"Alexander Rybak", who:"Die Herren vom Chorwochenende"},
+ {nr:17, title:"Love Shine a Light", year:1997, land:"Vereinigtes Königreich", orig:"Katrina and the Waves", who:"Die Damen vom Chorwochenende"},
+ {nr:18, title:"Satellite", year:2010, land:"Deutschland", orig:"Lena", who:"Blue Lights"},
+ {nr:19, title:"Hallelujah", year:1979, land:"Israel", orig:"Milk and Honey", who:"Blue Lights & QuerBeats"},
+ {nr:20, title:"Save Your Kisses for Me", year:1976, land:"Vereinigtes Königreich", orig:"Brotherhood of Man", who:"Blue Lights & QuerBeats"},
+ {nr:21, title:"Bangaranga", year:2026, land:"Bulgarien", orig:"", who:"Blue Lights & QuerBeats"}
+];
+
+/* ===== Darstellung ===== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const lyrUrl = s => "https://genius.com/search?q=" + encodeURIComponent(s.title + " " + (s.orig || ""));
+const sub = s => `${s.year} · ${s.land}${s.orig ? " · " + s.orig : ""}`;
+
+function renderList(){
+  $("#list").innerHTML = SONGS.map(s => `
+    <li class="row"><a class="song" href="#lied-${s.nr}">
+      <span class="nr">${s.nr}</span>
+      <span class="meta"><span class="t">${esc(s.title)}</span><span class="s">${esc(sub(s))}</span><span class="s">${esc(s.who)}</span></span>
+    </a><a class="lt" href="${lyrUrl(s)}" target="_blank" rel="noopener" aria-label="Liedtext zu ${esc(s.title)} öffnen">Text</a></li>${s.pauseAfter ? '<li class="pause">Pause</li>' : ""}`).join("");
+  const b = $("#vote-btn");
+  if (VOTE_URL){
+    $("#vote-txt").textContent = "Die Abstimmung öffnet um 19 Uhr. Ihr dürft so oft abstimmen, wie ihr wollt.";
+    b.textContent = "Jetzt abstimmen"; b.href = VOTE_URL; b.target = "_blank"; b.rel = "noopener"; b.removeAttribute("aria-disabled");
+  } else b.addEventListener("click", e => e.preventDefault());
+}
+
+function lyricsHtml(text){
+  return text.trim().split(/\n\s*\n/).map(st => {
+    const m = st.match(/^\[(Refrain|Chorus)\]\s*\n?/i);
+    return m ? `<p class="ref"><span class="lab">Refrain</span>${esc(st.slice(m[0].length))}</p>` : `<p>${esc(st)}</p>`;
+  }).join("");
+}
+
+function renderSong(nr){
+  const i = SONGS.findIndex(s => s.nr === nr); const s = SONGS[i];
+  const prev = SONGS[i-1], next = SONGS[i+1];
+  $("#song").innerHTML = `
+    <div class="bar">
+      <a class="back" href="#programm">‹ Programm</a>
+      <button class="ic" id="smaller" aria-label="Schrift kleiner">A−</button>
+      <button class="ic" id="bigger" aria-label="Schrift größer">A+</button>
+    </div>
+    <div class="lyr-head">
+      <div class="nr">Nr. ${s.nr}</div>
+      <h2>${esc(s.title)}</h2>
+      <p>${esc(sub(s))}</p>
+      <span class="who">Es singen: ${esc(s.who)}</span>
+    </div>
+    ${s.lyrics ? `<div class="lyrics">${lyricsHtml(s.lyrics)}</div>`
+      : `<div class="empty"><strong>Text in der Originalsprache</strong><br>Öffnet sich in einem neuen Fenster. Danach einfach hierher zurückwechseln.
+          <a class="btn" style="margin-top:12px" href="${lyrUrl(s)}" target="_blank" rel="noopener">Liedtext öffnen</a></div>`}
+    <nav class="nav" aria-label="Weitere Lieder">
+      ${prev ? `<a href="#lied-${prev.nr}"><small>‹ Nr. ${prev.nr}</small><span>${esc(prev.title)}</span></a>` : "<span></span>"}
+      ${next ? `<a class="nx" href="#lied-${next.nr}"><small>Nr. ${next.nr} ›</small><span>${esc(next.title)}</span></a>` : `<a class="nx" href="#programm"><small>Fertig ›</small><span>Zur Abstimmung</span></a>`}
+    </nav>`;
+  $("#smaller").onclick = () => setSize(-1);
+  $("#bigger").onclick = () => setSize(1);
+}
+
+/* Schriftgröße (pro Gerät gemerkt) */
+const SIZES = [1.1, 1.25, 1.35, 1.55, 1.8, 2.1];
+let sizeIx = 2;
+try { const v = parseInt(localStorage.getItem("lyrSize"), 10); if (v >= 0 && v < SIZES.length) sizeIx = v; } catch(e){}
+function applySize(){ document.documentElement.style.setProperty("--lyr", SIZES[sizeIx] + "rem"); }
+function setSize(d){ sizeIx = Math.max(0, Math.min(SIZES.length-1, sizeIx + d)); applySize(); try{ localStorage.setItem("lyrSize", sizeIx); }catch(e){} }
+applySize();
+
+/* Bildschirm beim Mitsingen anlassen */
+let lock = null;
+async function keepAwake(on){
+  try{
+    if (on && !lock && navigator.wakeLock){ lock = await navigator.wakeLock.request("screen"); lock.addEventListener("release", () => lock = null); }
+    if (!on && lock){ await lock.release(); lock = null; }
+  }catch(e){ lock = null; }
+}
+document.addEventListener("visibilitychange", () => { if (!document.hidden && !$("#song").hidden) keepAwake(true); });
+
+function route(){
+  const m = location.hash.match(/^#lied-(\d+)$/);
+  const nr = m ? +m[1] : 0;
+  const ok = SONGS.some(s => s.nr === nr);
+  $("#home").hidden = ok; $("#song").hidden = !ok;
+  if (ok){ renderSong(nr); keepAwake(true); }
+  else keepAwake(false);
+  window.scrollTo(0, 0);
+}
+renderList(); route();
+window.addEventListener("hashchange", route);
+</script>
+</body></html>

@@ -1,5 +1,5 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Blue Lights ESC-Abend</title>
+<title>Die European Song-Party</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
@@ -78,6 +78,7 @@ button.btn{cursor:pointer;width:100%}
 .lyr-head .nr{text-align:left;font-size:.9rem}
 .lyr-head h2{font-family:var(--f-display);font-size:clamp(1.5rem,6.5vw,2.1rem);line-height:1.12;margin:.25em 0;text-wrap:balance}
 .lyr-head p{margin:0;color:var(--muted)}
+.komp{font-size:.9rem;margin-top:4px!important}
 .who{display:inline-block;margin-top:10px;padding:4px 10px;border-radius:999px;background:var(--stage);border:1px solid var(--line);font-size:.88rem}
 .lyrics{font-size:var(--lyr);line-height:1.55;padding-block:18px 8px;display:grid;gap:1.1em}
 .lyrics p{margin:0;white-space:pre-line}
@@ -99,7 +100,7 @@ button.btn{cursor:pointer;width:100%}
   <main id="home" class="view">
     <header class="hero">
       <div class="eyebrow">Blue Lights · 70 Jahre Eurovision</div>
-      <h1>Unser <em>ESC</em>-Abend</h1>
+      <h1>Die European <em>Song-Party</em></h1>
       <p class="lead">21 Titel aus sieben Jahrzehnten. Mit „Text“ öffnet ihr den Liedtext in der Originalsprache. Ab 19 Uhr wählt ihr euren Lieblingstitel.</p>
     </header>
 
@@ -133,27 +134,27 @@ const PROBE = false; // Probelauf beendet am 22.11.2026
 /* ===== Programm =====
    lyrics: Liedtext als Text. Leerzeile trennt Strophen. Eine Strophe, die mit "[Refrain]" beginnt, wird hervorgehoben. */
 const SONGS = [
- {nr:1, title:"Ding-a-dong", year:1975, land:"Niederlande", orig:"Teach-In", who:"Blue Lights & QuerBeats"},
- {nr:2, title:"Puppet on a String", year:1967, land:"Vereinigtes Königreich", orig:"Sandie Shaw", who:"Blue Lights & QuerBeats"},
- {nr:3, title:"Boom Bang-a-Bang", year:1969, land:"Vereinigtes Königreich", orig:"Lulu", who:"Blue Lights & QuerBeats"},
- {nr:4, title:"Non ho l’età", year:1964, land:"Italien", orig:"Gigliola Cinquetti", who:"Kids & Teens"},
- {nr:5, title:"All Kinds of Everything", year:1970, land:"Irland", orig:"Dana", who:"Kids & Teens"},
- {nr:6, title:"Arcade", year:2019, land:"Niederlande", orig:"Duncan Laurence", who:"Kids & Teens"},
- {nr:7, title:"Making Your Mind Up", year:1981, land:"Vereinigtes Königreich", orig:"Bucks Fizz", who:"Blue Lights"},
- {nr:8, title:"Refrain", year:1956, land:"Schweiz", orig:"Lys Assia", who:"Blue Lights"},
- {nr:9, title:"Ein bißchen Frieden", year:1982, land:"Deutschland", orig:"Nicole", who:"Zoey"},
- {nr:10, title:"Waterloo", year:1974, land:"Schweden", orig:"ABBA", who:"Blue Lights", pauseAfter:true},
- {nr:11, title:"La det swinge", year:1985, land:"Norwegen", orig:"Bobbysocks!", who:"Blue Lights"},
- {nr:12, title:"Take Me to Your Heaven", year:1999, land:"Schweden", orig:"Charlotte Nilsson", who:"Blue Lights, evtl. mit QuerBeats"},
- {nr:13, title:"Fly on the Wings of Love", year:2000, land:"Dänemark", orig:"Olsen Brothers", who:"Heinz & Klaus"},
- {nr:14, title:"Amar pelos dois", year:2017, land:"Portugal", orig:"Salvador Sobral", who:"Lisa"},
- {nr:15, title:"Rise Like a Phoenix", year:2014, land:"Österreich", orig:"Conchita Wurst", who:"Tatjana"},
- {nr:16, title:"Fairytale", year:2009, land:"Norwegen", orig:"Alexander Rybak", who:"Die Herren vom Chorwochenende"},
- {nr:17, title:"Love Shine a Light", year:1997, land:"Vereinigtes Königreich", orig:"Katrina and the Waves", who:"Die Damen vom Chorwochenende"},
- {nr:18, title:"Satellite", year:2010, land:"Deutschland", orig:"Lena", who:"Blue Lights"},
- {nr:19, title:"Hallelujah", year:1979, land:"Israel", orig:"Milk and Honey", who:"Blue Lights & QuerBeats"},
- {nr:20, title:"Save Your Kisses for Me", year:1976, land:"Vereinigtes Königreich", orig:"Brotherhood of Man", who:"Blue Lights & QuerBeats"},
- {nr:21, title:"Bangaranga", year:2026, land:"Bulgarien", orig:"", who:"Blue Lights & QuerBeats"}
+ {nr:1, title:"Ding-a-dong", year:1975, land:"Niederlande", orig:"Teach-In", komp:"Musik: Dick Bakker · Text: Will Luikinga, Eddy Ouwens", who:"Blue Lights & QuerBeats"},
+ {nr:2, title:"Puppet on a String", year:1967, land:"Großbritannien", orig:"Sandie Shaw", komp:"Musik & Text: Bill Martin, Phil Coulter", who:"Blue Lights & QuerBeats"},
+ {nr:3, title:"Boom Bang-a-Bang", year:1969, land:"Großbritannien", orig:"Lulu", komp:"Musik: Alan Moorhouse · Text: Peter Warne", who:"Blue Lights & QuerBeats"},
+ {nr:4, title:"Non ho l’età", year:1964, land:"Italien", orig:"Gigliola Cinquetti", komp:"Musik: Mario Panzeri · Text: Nicola Salerno", who:"Kids & Teens"},
+ {nr:5, title:"All Kinds of Everything", year:1970, land:"Irland", orig:"Dana", komp:"Musik & Text: Derry Lindsay, Jackie Smith", who:"Kids & Teens"},
+ {nr:6, title:"Arcade", year:2019, land:"Niederlande", orig:"Duncan Laurence", komp:"Musik & Text: Duncan Laurence, Joel Sjöö, Wouter Hardy, Will Knox", who:"Kids & Teens"},
+ {nr:7, title:"Making Your Mind Up", year:1981, land:"Großbritannien", orig:"Bucks Fizz", komp:"Musik: John Danter · Text: Andy Hill", who:"Blue Lights"},
+ {nr:8, title:"Refrain", year:1956, land:"Schweiz", orig:"Lys Assia", komp:"Musik: Géo Voumard · Text: Émile Gardaz", who:"Blue Lights"},
+ {nr:9, title:"Ein bißchen Frieden", year:1982, land:"Deutschland", orig:"Nicole", komp:"Musik: Ralph Siegel · Text: Bernd Meinunger", who:"Zoey Hellmund"},
+ {nr:10, title:"Waterloo", year:1974, land:"Schweden", orig:"ABBA", komp:"Musik: Benny Andersson, Björn Ulvaeus · Text: Stig Anderson", who:"Blue Lights", pauseAfter:true},
+ {nr:11, title:"La det swinge", year:1985, land:"Norwegen", orig:"Bobbysocks", komp:"Musik & Text: Rolf Løvland", who:"Blue Lights"},
+ {nr:12, title:"Take Me to Your Heaven", year:1999, land:"Schweden", orig:"Charlotte Nilsson", komp:"Musik: Lars Diedricson · Text: Marcos Ubeda", who:"Blue Lights"},
+ {nr:13, title:"Fly on the Wings of Love", year:2000, land:"Dänemark", orig:"Olsen Brothers", komp:"Musik & Text: Jørgen Olsen", who:"Klaus Konasch & Heinz Watzinger"},
+ {nr:14, title:"Amar pelos dois", year:2017, land:"Portugal", orig:"Salvador Sobral", komp:"Musik & Text: Luísa Sobral", who:"Lisa Watzinger"},
+ {nr:15, title:"Rise Like a Phoenix", year:2014, land:"Österreich", orig:"Conchita Wurst", komp:"Musik & Text: Charlie Mason, Joey Patulka, Ali Zuckowski, Julian Maas", who:"Tatjana Watzinger"},
+ {nr:16, title:"Fairytale", year:2009, land:"Norwegen", orig:"Alexander Rybak", komp:"Musik & Text: Alexander Rybak", who:"Herren vom Chorwochenende"},
+ {nr:17, title:"Love Shine a Light", year:1997, land:"Großbritannien", orig:"Katrina and the Waves", komp:"Musik & Text: Kimberley Rew", who:"Damen vom Chorwochenende"},
+ {nr:18, title:"Satellite", year:2010, land:"Deutschland", orig:"Lena", komp:"Musik & Text: Julie Frost, John Gordon", who:"Blue Lights"},
+ {nr:19, title:"Hallelujah", year:1979, land:"Israel", orig:"Milk and Honey & Gali Atari", komp:"Musik: Kobi Oshrat · Text: Shimrit Orr", who:"Blue Lights & QuerBeats"},
+ {nr:20, title:"Save Your Kisses for Me", year:1976, land:"Großbritannien", orig:"Brotherhood of Man", komp:"Musik & Text: Tony Hiller, Lee Sheriden, Martin Lee", who:"Blue Lights & QuerBeats"},
+ {nr:21, title:"Bangaranga", year:2026, land:"Bulgarien", orig:"Dara", komp:"Musik & Text: Darina Yotova, Anne Judith Wik, Cristian Tarcea, Dimitris Kontopoulos", who:"Blue Lights & QuerBeats"}
 ];
 
 /* ===== Darstellung ===== */
@@ -242,6 +243,7 @@ function renderSong(nr){
       <div class="nr">Nr. ${s.nr}</div>
       <h2>${esc(s.title)}</h2>
       <p>${esc(sub(s))}</p>
+      ${s.komp ? `<p class="komp">${esc(s.komp)}</p>` : ""}
       <span class="who">Es singen: ${esc(s.who)}</span>
     </div>
     ${s.lyrics ? `<div class="lyrics">${lyricsHtml(s.lyrics)}</div>`

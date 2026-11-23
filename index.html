@@ -1,7 +1,7 @@
 <!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Die European Song-Party</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Unbounded:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <style>
 /* Layout: eine schmale Smartphone-Spalte. Startansicht = Programmliste mit Abstimmungs-Karte,
    Liedansicht = Mitsing-Text in großer Schrift mit Vor/Zurück. Bewusst ein dunkles "Bühnenlicht"-Thema. */
@@ -36,6 +36,17 @@ a{color:var(--gold)}
 .eyebrow{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 h1{font-family:var(--f-display);font-weight:700;font-size:clamp(1.7rem,7vw,2.4rem);line-height:1.08;margin:.3em 0 .35em;text-wrap:balance}
 h1 em{font-style:normal;color:var(--gold)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hero-art{position:relative;width:100%;max-width:440px;aspect-ratio:136/60;margin-top:14px}
+.seventy{position:absolute;left:0;top:0;width:82%;height:auto;overflow:visible;filter:drop-shadow(0 0 10px rgba(255,200,60,.5))}
+.brush{position:relative}
+.brush svg{position:absolute;inset:0;width:100%;height:100%}
+.brush-in{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-family:"Luckiest Guy",var(--f-display);color:#0a1147;text-transform:uppercase;line-height:.95}
+.jahre-b{position:absolute;right:0;top:34%;width:34%;aspect-ratio:46/15;transform:rotate(-6deg)}
+.jahre{font-size:clamp(1.1rem,6vw,1.8rem);padding-top:.15em}
+.title-b{width:94%;max-width:420px;aspect-ratio:128/34;transform:rotate(-4deg);margin:2px 0 22px 3%}
+.t1{font-size:clamp(1.25rem,7vw,2.1rem);padding-top:.2em}
+.t2{font-size:clamp(1.5rem,8.4vw,2.5rem)}
 .lead{color:var(--muted);margin:0;max-width:34em}
 
 /* Abstimmen */
@@ -99,8 +110,40 @@ button.btn{cursor:pointer;width:100%}
 <div class="wrap">
   <main id="home" class="view">
     <header class="hero">
-      <div class="eyebrow">Blue Lights · 70 Jahre Eurovision</div>
-      <h1>Die European <em>Song-Party</em></h1>
+      <div class="eyebrow">Die Blue Lights präsentieren</div>
+      <h1 class="sr">70 Jahre – Die European Song-Party</h1>
+<div class="hero-art" role="img" aria-label="70 Jahre – Die European Song-Party">
+<svg class="seventy" aria-hidden="true" viewBox="0 0 120 64">
+<defs>
+ <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3a6"/><stop offset=".35" stop-color="#ffd23a"/><stop offset=".7" stop-color="#f0a400"/><stop offset="1" stop-color="#c46f00"/></linearGradient>
+ <radialGradient id="lbl" cx=".5" cy=".4" r=".6"><stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#f0a400"/></radialGradient>
+</defs>
+<text x="2" y="58" font-family="Luckiest Guy" font-size="66" fill="#7a3d00" transform="translate(1.6,1.6)">7</text>
+<text x="2" y="58" font-family="Luckiest Guy" font-size="66" fill="url(#gold)" stroke="#fff6c0" stroke-width=".5">7</text>
+<g transform="translate(66,32)">
+ <circle r="31" fill="url(#gold)"/>
+ <circle r="28.6" fill="#11132b"/>
+ <circle cx="0" cy="0" r="10" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="12" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="14" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="16" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="18" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="20" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="22" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="24" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="26" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/><circle cx="0" cy="0" r="28" fill="none" stroke="#3a3f6b" stroke-width=".35" opacity=".8"/>
+ <path d="M -20 -18 A 27 27 0 0 1 14 -23" stroke="#9fb4ff" stroke-width="1.2" fill="none" opacity=".5"/>
+ <path d="M 18 20 A 27 27 0 0 1 -10 25" stroke="#9fb4ff" stroke-width="1" fill="none" opacity=".35"/>
+ <circle r="9.5" fill="url(#lbl)"/>
+ <circle r="1.3" fill="#11132b"/>
+ <!-- microphone -->
+ <g transform="rotate(-18)">
+  <rect x="-2.2" y="-3" width="4.4" height="20" rx="2" fill="#2b2b38" stroke="#d9d9e8" stroke-width=".5"/>
+  <ellipse cx="0" cy="-8" rx="6" ry="7.5" fill="#cfd3e6" stroke="#ffffff" stroke-width=".6"/>
+  <g stroke="#8a90a8" stroke-width=".45">
+   <line x1="-5" y1="-10" x2="5" y2="-10"/><line x1="-5.6" y1="-7" x2="5.6" y2="-7"/><line x1="-5" y1="-4" x2="5" y2="-4"/>
+   <line x1="-2.5" y1="-14.6" x2="-2.5" y2="-1.4"/><line x1="0" y1="-15.4" x2="0" y2="-0.6"/><line x1="2.5" y1="-14.6" x2="2.5" y2="-1.4"/>
+  </g>
+ </g>
+</g>
+</svg>
+<div class="brush jahre-b"><svg viewBox="0 0 46 15" preserveAspectRatio="none" aria-hidden="true"><polygon points="4.00,0.72 7.14,1.48 10.06,0.81 13.27,0.30 16.30,1.01 20.00,0.15 22.53,0.15 26.27,1.11 28.17,1.57 32.29,1.05 35.57,0.25 37.40,0.85 39.35,0.30 41.73,0.05 43.80,0.00 41.79,2.50 43.40,5.00 42.80,7.50 43.50,10.00 42.69,12.50 43.71,15.00 42.00,14.55 37.81,13.41 33.99,13.87 31.43,14.63 28.94,14.89 25.30,14.36 21.47,14.38 17.37,13.64 15.57,14.66 11.58,14.25 7.43,14.36 5.45,13.99 1.35,15.00 0.44,12.50 1.66,10.00 4.82,7.50 3.79,5.00 0.59,2.50 1.23,0.00" fill="#ffd400"/></svg><div class="brush-in"><span class="jahre">Jahre</span></div></div>
+</div>
+<div class="brush title-b"><svg viewBox="0 0 128 34" preserveAspectRatio="none" aria-hidden="true"><polygon points="4.00,0.76 7.38,1.07 9.52,0.02 12.22,0.44 15.96,1.10 19.21,0.89 22.60,0.23 25.45,0.26 29.43,0.09 33.19,0.12 36.64,0.54 39.41,1.35 41.26,0.10 45.25,0.81 47.27,1.58 51.34,0.18 54.16,0.22 56.71,0.99 58.90,1.11 60.82,0.27 64.58,0.64 67.39,0.95 70.33,0.62 72.20,1.16 76.33,1.56 79.72,0.57 82.39,1.10 85.81,0.18 88.17,0.58 91.20,1.30 94.20,0.05 97.97,0.69 101.02,0.36 103.84,0.62 107.50,0.16 110.62,0.28 114.09,0.06 116.55,0.55 119.88,0.08 122.78,0.33 125.62,0.00 123.21,5.67 125.59,11.33 123.22,17.00 127.16,22.67 123.38,28.33 126.18,34.00 124.00,33.70 120.40,32.54 118.59,33.57 114.94,33.45 112.56,33.99 110.66,33.01 106.50,32.40 103.49,33.96 100.92,32.74 97.12,32.98 94.77,33.16 91.83,33.00 89.39,32.49 85.45,33.74 82.95,32.60 80.48,32.49 77.44,32.89 73.95,33.66 71.47,33.59 68.03,32.89 65.91,32.58 63.10,33.61 60.26,32.43 57.12,33.00 53.11,32.46 49.48,33.33 46.27,32.56 42.58,33.07 39.94,33.41 36.38,33.10 34.54,32.86 30.57,32.72 26.61,32.54 23.53,32.74 20.82,33.84 18.17,33.50 14.13,32.90 11.03,33.00 8.93,33.15 5.45,33.37 2.03,34.00 1.62,28.33 3.43,22.67 0.71,17.00 0.45,11.33 1.56,5.67 3.48,0.00" fill="#ffd400"/></svg><div class="brush-in"><span class="t1">Die European</span><span class="t2">Song-Party</span></div></div>
+
+
       <p class="lead">21 Titel aus sieben Jahrzehnten. Mit „Text“ öffnet ihr den Liedtext in der Originalsprache. Ab 19 Uhr wählt ihr euren Lieblingstitel.</p>
     </header>
 

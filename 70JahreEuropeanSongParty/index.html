@@ -316,16 +316,27 @@ function renderList(){
 
 /* ===== Abstimmung ===== */
 let voteState = "closed", picked = null, lastVote = null;
+// Stoppsignal: status.json neben der Seite. {"closed": true} schließt die Abstimmung für alle.
+let STOPPED = false;
+async function checkStatus(){
+  try{
+    const r = await fetch("status.json?t=" + Date.now(), {cache:"no-store"});
+    if (r.ok){ const j = await r.json(); if (j && j.closed && !STOPPED){ STOPPED = true; voteState = "closed"; renderVote(); } }
+  }catch(e){}
+  return STOPPED;
+}
 function voteOpen(){
-  if (TEST || PROBE) return true;
+  if (TEST) return true;
+  if (STOPPED) return false;
+  if (PROBE) return true;
   const t = Date.now();
   return t >= OPEN_AT && t < CLOSE_AT;
 }
 function renderVote(){
   const a = $("#vote-area");
   if (!voteOpen()){
-    const over = Date.now() >= CLOSE_AT;
-    $("#vote-txt").textContent = over ? "Die Abstimmung ist beendet. Danke fürs Mitmachen!" : "Die Abstimmung öffnet am 28. November um 19 Uhr. Ihr dürft so oft abstimmen, wie ihr wollt.";
+    const over = STOPPED || Date.now() >= CLOSE_AT;
+    $("#vote-txt").textContent = over ? "Die Abstimmung ist beendet. Danke fürs Mitmachen! Das Ergebnis gibt es gleich auf der Bühne." : "Die Abstimmung öffnet am 28. November um 19 Uhr. Ihr dürft so oft abstimmen, wie ihr wollt.";
     a.innerHTML = `<button class="btn" type="button" disabled aria-disabled="true">${over ? "Abstimmung beendet" : "Abstimmung ab 19 Uhr"}</button>`;
     return;
   }
@@ -353,6 +364,7 @@ function renderVote(){
 }
 async function sendVote(){
   voteState = "sending"; renderVote();
+  if (!TEST && await checkStatus()) return;
   const body = new URLSearchParams(); body.set(FORM_ENTRY, `${picked.nr}. ${picked.title}`);
   try{
     if (!TEST) await fetch(FORM_POST, {method:"POST", mode:"no-cors", body});
@@ -363,6 +375,7 @@ async function sendVote(){
     const er = $("#vote-err"); er.hidden = false; er.textContent = "Senden hat nicht geklappt. Bitte Internetverbindung prüfen und noch einmal tippen.";
   }
 }
+checkStatus(); setInterval(checkStatus, 15000);
 setInterval(() => { if ((voteState === "closed") === voteOpen()) { if (!voteOpen()) voteState = "closed"; renderVote(); } }, 30000);
 
 function lyricsHtml(text){
